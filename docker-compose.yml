@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:17
+
+    container_name: moshfit-postgres
+
+    environment:
+      POSTGRES_USER: mosh
+      POSTGRES_PASSWORD: mosh123
+      POSTGRES_DB: moshfit
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
