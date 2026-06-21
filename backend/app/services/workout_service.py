@@ -84,3 +84,26 @@ class WorkoutService:
 
         finally:
             db.close()
+
+    @staticmethod
+    def list():
+        db = SessionLocal()
+
+        try:
+            stmt = select(Workout).order_by(Workout.workout_date.desc())
+
+            workouts = db.execute(stmt).scalars().all()
+
+            return [
+                    {
+                        "id": workout.id,
+                        "workout_date": workout.workout_date,
+                        "name": workout.name
+                    }    
+                    for workout in workouts           
+            ]
+
+        finally:
+            db.close()    
+
+

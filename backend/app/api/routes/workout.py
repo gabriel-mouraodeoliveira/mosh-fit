@@ -11,3 +11,7 @@ router = APIRouter(
 @router.post("")
 def create_workout(workout: WorkoutCreate):
     return WorkoutService.create(workout)
+
+@router.get("")
+def list_workouts():
+    return WorkoutService.list()   
