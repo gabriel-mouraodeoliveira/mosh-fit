@@ -148,10 +148,29 @@ class WorkoutService:
                 .all()
             )
 
+            exercise_map = {
+                exercise.id: exercise
+                for exercise in exercises
+            }
+
+            exercise_data = [
+                {
+                    "exercise_id": workout_exercise.exercise_id,
+                    "exercise_name": exercise_map[
+                        workout_exercise.exercise_id
+                    ].name,
+                    "sets": workout_exercise.sets,
+                    "reps": workout_exercise.reps,
+                    "weight": workout_exercise.weight
+                }
+                for workout_exercise in workout_exercises
+            ]
+
             return {
                 "id": workout.id,
                 "name": workout.name,
-                "workout_date": workout.workout_date
+                "workout_date": workout.workout_date,
+                "exercises": exercise_data
             }
 
             pass
