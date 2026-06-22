@@ -90,7 +90,7 @@ class WorkoutService:
         db = SessionLocal()
 
         try:
-            stmt = select(Workout).order_by(Workout.workout_date.desc())
+            stmt = select(Workout).where(Workout.is_active).order_by(Workout.workout_date.desc())
 
             workouts = db.execute(stmt).scalars().all()
 

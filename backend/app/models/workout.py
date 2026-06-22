@@ -3,6 +3,8 @@ from datetime import date
 from sqlalchemy import Date
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy import Boolean
+
 
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
@@ -26,4 +28,10 @@ class Workout(Base):
     name: Mapped[str] = mapped_column(
     String(100),
     nullable=False
+    )
+
+    is_active: Mapped[bool] = mapped_column(
+    Boolean,
+    nullable=False,
+    default=True
     )
