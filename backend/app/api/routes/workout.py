@@ -15,3 +15,7 @@ def create_workout(workout: WorkoutCreate):
 @router.get("")
 def list_workouts():
     return WorkoutService.list()   
+
+@router.get("/{workout_id}")
+def get_workout(workout_id: int):
+    return WorkoutService.get_by_id(workout_id)    
