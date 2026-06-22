@@ -107,7 +107,58 @@ class WorkoutService:
             db.close()    
 
 
-        
+    @staticmethod
+    def get_by_id(workout_id: int):
+        db = SessionLocal()
+
+        try:
+            stmt = select(Workout).where(Workout.id == workout_id)
+
+            workout = (
+                db.execute(stmt).scalars().first()               
+            )
+
+            if not workout:
+                raise HTTPException(
+                    status_code=404,
+                    detail="Workout not found"
+                )
+
+            stmt = select(WorkoutExercise).where(WorkoutExercise.workout_id == workout.id)
+
+            workout_exercises = (
+                db.execute(stmt)
+                .scalars()
+                .all()
+            )
+
             
+            exercise_ids = [
+                workout_exercise.exercise_id
+                for workout_exercise in workout_exercises
+            ]
+
+            stmt = select(Exercise).where(
+            Exercise.id.in_(exercise_ids)
+            )
+
+            exercises = (
+                db.execute(stmt)
+                .scalars()
+                .all()
+            )
+
+            return {
+                "id": workout.id,
+                "name": workout.name,
+                "workout_date": workout.workout_date
+            }
+
+            pass
+
+        finally:
+            db.close()        
+
+
 
 
