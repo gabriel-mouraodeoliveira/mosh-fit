@@ -176,8 +176,54 @@ class WorkoutService:
             pass
 
         finally:
-            db.close()        
+            db.close()
 
+    @staticmethod
+    def deactivate(workout_id: int):
+        db = SessionLocal()
 
+        try:
+            stmt = select(Workout).where(Workout.id == workout_id)
+
+            workout = (
+                db.execute(stmt).scalars().first()               
+            )
+
+            if not workout:
+                raise HTTPException(
+                    status_code=404,
+                    detail="Workout not found"
+                )
+            
+            workout.is_active = False
+
+            db.commit()
+
+        finally:
+            db.close()
+
+    @staticmethod
+    def activate(workout_id: int):
+        db = SessionLocal()
+
+        try:
+            stmt = select(Workout).where(Workout.id == workout_id)
+
+            workout = (
+                db.execute(stmt).scalars().first()               
+            )
+
+            if not workout:
+                raise HTTPException(
+                    status_code=404,
+                    detail="Workout not found"
+                )
+            
+            workout.is_active = True
+
+            db.commit()
+
+        finally:
+            db.close()
 
 
