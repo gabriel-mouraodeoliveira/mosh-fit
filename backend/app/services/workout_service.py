@@ -227,3 +227,58 @@ class WorkoutService:
             db.close()
 
 
+    @staticmethod
+    def list_history():
+        db = SessionLocal()
+
+        try:
+            stmt = select(Workout).where(Workout.is_active == False).order_by(Workout.workout_date.desc())
+
+            workouts = (
+                db.execute(stmt).scalars().all()
+            )
+
+            return [
+                        {
+                            "id": workout.id,
+                            "workout_date": workout.workout_date,
+                            "name": workout.name
+                        }    
+                        for workout in workouts           
+                ]
+
+        finally:
+                db.close()    
+
+    @staticmethod
+    def delete(workout_id: int):
+        db = SessionLocal()
+
+        try:
+            stmt = select(Workout).where(Workout.id == workout_id)
+
+            workout = (
+                db.execute(stmt).scalars().first()               
+            )
+
+            if not workout:
+                raise HTTPException(
+                    status_code=404,
+                    detail="Workout not found"
+                )
+
+            stmt = select(WorkoutExercise).where(WorkoutExercise.workout_id == workout.id)
+
+            workout_exercises = (
+                db.execute(stmt)
+                .scalars()
+                .all()
+            )
+            for workout_exercise in workout_exercises:
+                db.delete(workout_exercise)
+            
+            db.delete(workout)
+            db.commit()
+
+        finally:
+            db.close()

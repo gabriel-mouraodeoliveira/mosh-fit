@@ -26,4 +26,12 @@ def deactivate(workout_id: int):
 
 @router.patch("/{workout_id}/activate", status_code=204)
 def activate(workout_id: int):
-    WorkoutService.activate(workout_id)   
+    WorkoutService.activate(workout_id)
+
+@router.get("/history")
+def list_history():
+    return WorkoutService.list_history()
+
+@router.delete("/{workout_id}", status_code=204)
+def delete_workout(workout_id: int):
+    WorkoutService.delete(workout_id) 
